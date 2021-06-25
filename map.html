@@ -1,0 +1,77 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin=""/>
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+    <link rel="stylesheet" href="try.css">
+</head>
+<body>
+    <div id="mapid"></div>
+    <!--script src="try.js"></script-->
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script> 
+    <script src="http://leafletjs.com/dist/leaflet.js"></script> 
+    <script type="text/javascript">
+        $(document).ready(function () {
+        init_map();
+        add_marker();
+        });
+        var map;
+
+        function init_map() {
+            map = L.map('mapid').setView([12.8901307, 2.424668], 4);
+            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYW5pa2FzbGFtIiwiYSI6ImNrcTlpZ3J0bzAzZXgydGw5a2lnaTlxOXoifQ.OovZFL4WqgfdElRcHTIC1Q', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                maxZoom: 18,
+                id: 'mapbox/streets-v11',
+                tileSize: 512,
+                zoomOffset: -1,
+                accessToken: 'your.mapbox.access.token'
+                }).addTo(map);
+        }
+
+        function add_marker() {
+            var points = [
+                ["Livourne Italy", 43.5398079, 10, "LivourneCombine.html"],
+                ["Moroni Comorres", -11.7009062, 43, "MoroniCombine.html"],
+                ["Santos Brazil", -23.9715768, -46.2970715, "SantosCombine.html"],
+                ["Suez Canal", 30.4501127, 32.3374227, "SuezCombine.html"]
+            ];  
+            var marker = [];
+            var label = ["Livourne Italy","Moroni Comorres","Santos Brazil", "Suez Canal"];
+
+            // var marker1 = new L.marker(43.5398079,10, {
+            //         win_url: "Livourne.html"
+            //     });
+            //     marker1.addTo(map);
+            //     marker1.bindPopup("<b>"+ label[0] +"</b><br>").openPopup();
+            var i;
+            for (i = 0; i < points.length; i++) {
+                marker[i] = new L.Marker([points[i][1], points[i][2]], {
+                    win_url: points[i][3]
+                });
+                marker[i].addTo(map);
+                marker[i].bindPopup("<b>"+ label[i] +"</b><br>");
+                marker[i].on('mouseover', function (e) {
+                    this.openPopup();
+                });
+                marker[i].on('mouseout', function (e) {
+                    this.closePopup();
+                });
+                marker[i].on('click', onClick);
+            };
+        }
+
+        function onClick(e) {
+            //console.log(this.options.win_url);
+            window.location = this.options.win_url;
+            // window.open(this.options.win_url);
+        }
+</script>
+    
+</body>
+</html>
